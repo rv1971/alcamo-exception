@@ -154,18 +154,16 @@ trait ExceptionTrait
 
         parent::__construct('', $code, $previous);
 
-        $this->setMessageContext(
-            $context
-            + (defined('static::DEFAULT_MESSAGE_CONTEXT')
-               ? static::DEFAULT_MESSAGE_CONTEXT
-               : Constants::DEFAULT_MESSAGE_CONTEXT)
-        );
+        $this->setMessageContext($context);
     }
 
     /// Set @ref messageContext and @ref $message, then return $this
     public function setMessageContext(array $context): ExceptionInterface
     {
-        $this->messageContext = $context;
+        $this->messageContext = $context
+            + (defined('static::DEFAULT_MESSAGE_CONTEXT')
+               ? static::DEFAULT_MESSAGE_CONTEXT
+               : Constants::DEFAULT_MESSAGE_CONTEXT);
 
         $this->message = static::normalizedMessage2Message(
             $this->normalizedMessage,
