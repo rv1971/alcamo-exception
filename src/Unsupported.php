@@ -9,5 +9,5 @@ class Unsupported extends \LogicException implements ExceptionInterface
 {
     use ExceptionTrait;
 
-    NORMALIZED_MESSAGE = '{feature} not supported';
+    public const NORMALIZED_MESSAGE = '{feature} not supported';
 }

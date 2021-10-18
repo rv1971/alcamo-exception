@@ -9,5 +9,5 @@ class Recursion extends \RuntimeException implements ExceptionInterface
 {
     use ExceptionTrait;
 
-    NORMALIZED_MESSAGE = 'Recursion detected';
+    public const NORMALIZED_MESSAGE = 'Recursion detected';
 }
