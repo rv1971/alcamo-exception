@@ -9,5 +9,6 @@ class ReadonlyViolation extends \LogicException implements ExceptionInterface
 {
     use ExceptionTrait;
 
-    NORMALIZED_MESSAGE = 'Attempt to modify readonly object {object}';
+    public const NORMALIZED_MESSAGE =
+        'Attempt to modify readonly object {object}';
 }
