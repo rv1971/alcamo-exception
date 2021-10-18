@@ -26,6 +26,7 @@ class Constants
         'atLine'         => ' at line %s',
         'atOffset'       => ' at offset %s',
         'inPlaces'       => ' in %s',
-        'atUri'          => ' at URI %s'
+        'atUri'          => ' at URI %s',
+        'extraMessage'   => '; %s'
     ];
 }

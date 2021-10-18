@@ -1,7 +1,5 @@
 <?php
 
-namespace alcamo\exception;
-
 /**
  * @namespace alcamo::exception
  *
@@ -14,6 +12,8 @@ namespace alcamo\exception;
  * the former are all contained the interface ExceptionInterface and the trait
  * ExceptionTrait, they can be incorporated in any given exception hierarchy.
  */
+
+namespace alcamo\exception;
 
 use Wikimedia\NormalizedException\INormalizedException;
 

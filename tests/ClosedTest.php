@@ -4,8 +4,9 @@ namespace alcamo\exception;
 
 use PHPUnit\Framework\TestCase;
 
-class Foo {
-};
+class Foo
+{
+}
 
 class ClosedTest extends TestCase
 {

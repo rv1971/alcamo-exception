@@ -89,13 +89,13 @@ trait ExceptionTrait
                 $valueString =
                     static::value2string($context[$placeholder], $maxLength);
 
-                $message .= sprintf($fragment, $valueString);
-
                 /** If the context contains an `atOffset` key, also the data
                  *  fragment starting at that offset is added to the
                  *  message. */
                 switch ($placeholder) {
                     case 'atOffset':
+                        $message .= sprintf($fragment, $valueString);
+
                         if (isset($context['inData'])) {
                             $dataString =
                                 static::value2string($context['inData']);
@@ -121,6 +121,21 @@ trait ExceptionTrait
                         }
 
                         break;
+
+                    case 'extraMessage':
+                        if ($valueString[0] == '"' && $valueString[-1] == '"') {
+                            $valueString = substr(
+                                $valueString,
+                                1,
+                                strlen($valueString) - 2
+                            );
+                        }
+
+                        $message .= sprintf($fragment, $valueString);
+                        break;
+
+                    default:
+                        $message .= sprintf($fragment, $valueString);
                 }
             }
         }
@@ -134,24 +149,8 @@ trait ExceptionTrait
         \Throwable $previous = null,
         array $context = []
     ) {
-        switch (true) {
-            /**- If $normalizedMessage is unset, use the class constant
-             * NORMALIZED_MESSAGE of the class used. */
-            case !isset($normalizedMessage):
-                $this->normalizedMessage = static::NORMALIZED_MESSAGE;
-                break;
-
-            /**- If $normalizedMessage starts with a semicolon, append it to
-             * the class constant NORMALIZED_MESSAGE of the class used. */
-            case $normalizedMessage[0] == ';':
-                $this->normalizedMessage =
-                    static::NORMALIZED_MESSAGE . $normalizedMessage;
-                break;
-
-                /**- Otherwise use $normalizedMessage. */
-            default:
-                $this->normalizedMessage = $normalizedMessage;
-        }
+        $this->normalizedMessage =
+            $normalizedMessage ?? static::NORMALIZED_MESSAGE;
 
         parent::__construct('', $code, $previous);
 

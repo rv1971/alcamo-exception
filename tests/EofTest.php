@@ -4,8 +4,9 @@ namespace alcamo\exception;
 
 use PHPUnit\Framework\TestCase;
 
-class Bar {
-};
+class Bar
+{
+}
 
 class EofTest extends TestCase
 {

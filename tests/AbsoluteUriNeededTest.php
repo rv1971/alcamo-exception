@@ -44,29 +44,31 @@ class AbsoluteUriNeededTest extends TestCase
                 'Relative URI "foo/bar" given where absolute URI is needed'
             ],
             [
-                '; lorem ipsum',
+                null,
                 42,
                 new \UnexpectedValueException(),
                 [
                     'uri' => new Uri('baz.php?x=1'),
                     'atOffset' => 2,
                     'inData' => [ 3, 5, 'baz.php?x=1', 7.11, null, true ],
-                    'inMethod' => 'runFoo'
+                    'inMethod' => 'runFoo',
+                    'extraMessage' => 'lorem ipsum'
                 ],
                 'Relative URI "baz.php?x=1" given where absolute URI is needed'
-                . '; lorem ipsum in method "runFoo"'
+                . ' in method "runFoo"'
                 . ' in [3, 5, "baz.php?x=1", 7.11, <null>, <t...]'
-                . ' at offset 2'
+                . ' at offset 2; lorem ipsum'
             ],
             [
-                'Custom exception',
+                'Custom exception of type {foo}',
                 43,
                 null,
                 [
                     'uri' => new Uri('/qux'),
-                    'inData' => new \stdClass()
+                    'inData' => new \stdClass(),
+                    'foo' => 'Foo'
                 ],
-                'Custom exception in <stdClass>'
+                'Custom exception of type "Foo" in <stdClass>'
             ]
         ];
     }
