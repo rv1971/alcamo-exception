@@ -6,5 +6,5 @@ namespace alcamo\exception;
 class Uninitialized extends AbstractObjectStateException
 {
     public const NORMALIZED_MESSAGE =
-        'Attempt to access uninitialized object {object}';
+        'Attempt to access uninitialized {objectType} {object}';
 }

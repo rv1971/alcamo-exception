@@ -6,5 +6,5 @@ namespace alcamo\exception;
 class Opened extends AbstractObjectStateException
 {
     public const NORMALIZED_MESSAGE =
-        'Attempt to open already opened object {object}';
+        'Attempt to open already opened {objectType} {object}';
 }

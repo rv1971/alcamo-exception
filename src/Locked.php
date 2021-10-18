@@ -6,5 +6,5 @@ namespace alcamo\exception;
 class Locked extends AbstractObjectStateException
 {
     public const NORMALIZED_MESSAGE =
-        'Attempt to modify locked object {object}';
+        'Attempt to modify locked {objectType} {object}';
 }

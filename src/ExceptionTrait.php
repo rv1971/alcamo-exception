@@ -63,16 +63,32 @@ trait ExceptionTrait
     ) {
         $replacements = [];
 
-        /// Replace context values into placeholders
-        foreach ($context as $placeholder => $value) {
-            $replacements['{' . $placeholder . '}'] = static::value2string($value);
-        }
-
-        $message = strtr($normalizedMessage, $replacements);
-
         $maxLength = defined('static::MAX_VALUE_LENGTH')
             ? static::MAX_VALUE_LENGTH
             : Constants::MAX_VALUE_LENGTH;
+
+        /// Replace context values into placeholders
+        foreach ($context as $placeholder => $value) {
+            $valueString =
+                static::value2string($context[$placeholder], $maxLength);
+
+            switch ($placeholder) {
+                case 'objectType':
+                    if ($valueString[0] == '"' && $valueString[-1] == '"') {
+                        $valueString = substr(
+                            $valueString,
+                            1,
+                            strlen($valueString) - 2
+                        );
+                    }
+
+                    break;
+            }
+
+            $replacements['{' . $placeholder . '}'] = $valueString;
+        }
+
+        $message = strtr($normalizedMessage, $replacements);
 
         /** For each item in @ref MESSAGE_FRAGMENT_MAP, if the data element is
          *  present in the context data *and has not yet been replaced* into
