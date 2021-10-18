@@ -4,25 +4,30 @@ namespace alcamo\exception;
 
 use PHPUnit\Framework\TestCase;
 
+class Baz
+{
+    public function throwReadonlyViolation()
+    {
+        throw new ReadonlyViolation();
+    }
+}
+
 class ReadonlyViolationTest extends TestCase
 {
-    /**
-     * @dataProvider basicsProvider
-     */
-    public function testBasics($context, $expectedMessage)
+    public function testBasics()
     {
-        $e = new ReadonlyViolation(null, 0, null, $context);
+        try {
+            (new Baz())->throwReadonlyViolation();
+        } catch (ReadonlyViolation $e) {
+            $this->assertSame(
+                'Attempt to modify readonly object <alcamo\exception\Baz>'
+                . ' in method "throwReadonlyViolation"',
+                $e->getMessage()
+            );
 
-        $this->assertSame($expectedMessage, $e->getMessage());
-    }
+            return;
+        }
 
-    public function basicsProvider()
-    {
-        return [
-            [
-                [ 'object' => 'const' ],
-                'Attempt to modify readonly object "const"'
-            ]
-        ];
+        throw new Exception('No exception thrown.');
     }
 }
