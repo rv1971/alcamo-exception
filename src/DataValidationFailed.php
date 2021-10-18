@@ -13,5 +13,5 @@ namespace alcamo\exception;
  */
 class DataValidationFailed extends AbstractDataException
 {
-    NORMALIZED_MESSAGE = 'Validation failed';
+    public const NORMALIZED_MESSAGE = 'Validation failed';
 }

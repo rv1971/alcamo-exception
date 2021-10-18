@@ -9,5 +9,5 @@ namespace alcamo\exception;
  */
 class FileNotFound extends AbstractIoException
 {
-    NORMALIZED_MESSAGE = 'File {filename} not found';
+    public const NORMALIZED_MESSAGE = 'File {filename} not found';
 }

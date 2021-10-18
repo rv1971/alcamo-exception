@@ -11,31 +11,11 @@ trait ExceptionTrait
 {
     use NormalizedExceptionTrait;
 
-    /// Maximum length of values wqhen replaced into messages
-    public const MAX_VALUE_LENGTH = 40;
-
-    /// Default values for message context
-    DEFAULT_MESSAGE_CONTEXT = [];
-
-    /**
-     * @brief Fragments that may be automaticaly appended to the message
-     *
-     * Map of keys of message context to sprintf()-templates.
-     */
-    public const MESSAGE_FRAGMENT_MAP = [
-        'expectedOneOf'  => ', expected one of',
-        'availableUnits' => ', only %s units available',
-        'inMode'         => ' in mode %s',
-        'inData'         => ' in "%s"',
-        'atLine'         => ' at line %s',
-        'atOffset'       => ' at offset %s',
-        'inPlaces'       => ' in %s',
-        'atUri'          => ' at URI %s'
-    ];
-
-    /// Transform a value to a string
-    public static function value2string($value, ?int $maxLength = null): string
-    {
+    /// Transform a value to a string for display in messages
+    public static function value2string(
+        $value,
+        ?int $maxLength = null
+    ): string {
         switch (true) {
             case !isset($value):
                 return '<null>';
@@ -47,13 +27,20 @@ trait ExceptionTrait
                     $valueStrings[] = static::value2string($item);
                 }
 
-                return static::value2string(
-                    '[' . implode(', ', $valueStrings) . ']',
-                    $maxLength
-                );
+                $value = implode(', ', $valueStrings);
+
+                if (isset($maxLength) && strlen($value) > $maxLength) {
+                    return '[' . substr($value, 0, $maxLength - 3) . '...]';
+                } else {
+                    return "[$value]";
+                }
 
             case is_bool($value):
                 return $value ? '<true>' : '<false>';
+
+            case is_float($value):
+            case is_int($value):
+                return $value;
 
             case is_object($value) && !method_exists($value, '__toString'):
                 return '<' . get_class($value) . '>';
@@ -62,7 +49,7 @@ trait ExceptionTrait
                 $value = (string)$value;
 
                 if (isset($maxLength) && strlen($value) > $maxLength) {
-                    return '"' . substr($value, 0, $maxLength - 3) . '..."'
+                    return '"' . substr($value, 0, $maxLength - 3) . '..."';
                 } else {
                     return "\"$value\"";
                 }
@@ -76,51 +63,64 @@ trait ExceptionTrait
     ) {
         $replacements = [];
 
+        /// Replace context values into placeholders
         foreach ($context as $placeholder => $value) {
-            $replacements["{$placeholder}"] = static::value2string($value);
+            $replacements['{' . $placeholder . '}'] = static::value2string($value);
         }
 
         $message = strtr($normalizedMessage, $replacements);
 
+        $maxLength = defined('static::MAX_VALUE_LENGTH')
+            ? static::MAX_VALUE_LENGTH
+            : Constants::MAX_VALUE_LENGTH;
+
         /** For each item in @ref MESSAGE_FRAGMENT_MAP, if the data element is
-         *  present in the context data and has not yet been replaced into the
-         *  message, append the corresponding fragment. */
-        foreach (static::MESSAGE_FRAGMENT_MAP as $placeholder => $fragment) {
+         *  present in the context data *and has not yet been replaced* into
+         *  the message, append the corresponding fragment. */
+        foreach (
+            (defined('static::MESSAGE_FRAGMENT_MAP')
+             ? static::MESSAGE_FRAGMENT_MAP
+             : Constants::MESSAGE_FRAGMENT_MAP) as $placeholder => $fragment
+        ) {
             if (
                 isset($context[$placeholder])
                 && strpos($normalizedMessage, "{$placeholder}") === false
             ) {
-                $valueString = static::value2string(
-                    $context[$placeholder],
-                    static::MAX_VALUE_LENGTH
-                );
+                $valueString =
+                    static::value2string($context[$placeholder], $maxLength);
+
+                $message .= sprintf($fragment, $valueString);
 
                 /** If the context contains an `atOffset` key, also the data
                  *  fragment starting at that offset is added to the
                  *  message. */
                 switch ($placeholder) {
                     case 'atOffset':
-                        $message .= sprintf($fragment, $valueString);
+                        if (isset($context['inData'])) {
+                            $dataString =
+                                static::value2string($context['inData']);
 
-                        if (isset($context['data'])) {
-                            $offendingDataString = substr(
-                                static::value2string($context['data']),
-                                $valueString
-                            );
+                            if ($dataString[0] == '"') {
+                                $offendingDataString = substr(
+                                    $dataString,
+                                    $valueString + 1,
+                                    strlen($dataString) - $valueString - 2
+                                );
 
-                            $message .= sprintf(
-                                ' (%s)',
-                                static::value2string(
-                                    $offendingDataString,
-                                    static::MAX_VALUE_LENGTH
-                                )
-                            );
+                                if (strlen($offendingDataString) > $maxLength) {
+                                    $offendingDataString =
+                                        substr(
+                                            $offendingDataString,
+                                            0,
+                                            $maxLength - 3
+                                        ) . '...';
+                                }
+
+                                $message .= " (\"$offendingDataString\")";
+                            }
                         }
 
                         break;
-
-                    default:
-                        $message .= sprintf($fragment, $valueString);
                 }
             }
         }
@@ -131,28 +131,39 @@ trait ExceptionTrait
     public function __construct(
         ?string $normalizedMessage = null,
         int $code = 0,
-        Throwable $previous = null,
+        \Throwable $previous = null,
         array $context = []
     ) {
         switch (true) {
+            /**- If $normalizedMessage is unset, use the class constant
+             * NORMALIZED_MESSAGE of the class used. */
             case !isset($normalizedMessage):
                 $this->normalizedMessage = static::NORMALIZED_MESSAGE;
                 break;
 
+            /**- If $normalizedMessage starts with a semicolon, append it to
+             * the class constant NORMALIZED_MESSAGE of the class used. */
             case $normalizedMessage[0] == ';':
                 $this->normalizedMessage =
                     static::NORMALIZED_MESSAGE . $normalizedMessage;
                 break;
 
+                /**- Otherwise use $normalizedMessage. */
             default:
                 $this->normalizedMessage = $normalizedMessage;
         }
 
         parent::__construct('', $code, $previous);
 
-        $this->setMessageContext($context + static::DEFAULT_MESSAGE_CONTEXT);
+        $this->setMessageContext(
+            $context
+            + (defined('static::DEFAULT_MESSAGE_CONTEXT')
+               ? static::DEFAULT_MESSAGE_CONTEXT
+               : Constants::DEFAULT_MESSAGE_CONTEXT)
+        );
     }
 
+    /// Set @ref messageContext and @ref $message, then return $this
     public function setMessageContext(array $context): ExceptionInterface
     {
         $this->messageContext = $context;
@@ -161,5 +172,7 @@ trait ExceptionTrait
             $this->normalizedMessage,
             $this->messageContext
         );
+
+        return $this;
     }
 }

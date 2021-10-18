@@ -7,5 +7,5 @@ namespace alcamo\exception;
  */
 class DirectoryNotFound extends AbstractIoException
 {
-    NORMALIZED_MESSAGE = 'Directory {path} not found';
+    public const NORMALIZED_MESSAGE = 'Directory {path} not found';
 }

@@ -5,13 +5,17 @@ namespace alcamo\exception;
 /**
  * @brief Exception thrown when a value was not of a valid type
  */
-class InvalidEnumerator extends \UnexpectedValueException
-    implements ExceptionInterface
+class InvalidType extends \UnexpectedValueException implements
+    ExceptionInterface
 {
-    use ExceptionTrait;
+    use ExceptionTrait {
+        ExceptionTrait::setMessageContext as parentSetMessageContext;
+    }
 
-    NORMALIZED_MESSAGE = 'Invalid type {type}';
+    public const NORMALIZED_MESSAGE = 'Invalid type {type}';
 
+    /** If `type` is not given in the context but `value` is, add the class or
+     *  type of `value` as `type`. */
     public function setMessageContext(array $context): ExceptionInterface
     {
         if (!isset($context['type']) && isset($context['value'])) {
@@ -21,6 +25,6 @@ class InvalidEnumerator extends \UnexpectedValueException
                 is_object($value) ? get_class($value) : gettype($value);
         }
 
-        return parent::setMessageContext($context);
+        return $this->parentSetMessageContext($context);
     }
 }

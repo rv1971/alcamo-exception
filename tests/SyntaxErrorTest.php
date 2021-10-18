@@ -1,0 +1,27 @@
+<?php
+
+namespace alcamo\exception;
+
+use PHPUnit\Framework\TestCase;
+
+class SyntaxErrorTest extends TestCase
+{
+    /**
+     * @dataProvider basicsProvider
+     */
+    public function testBasics($context, $expectedMessage)
+    {
+        $e = new SyntaxError(null, 0, null, $context);
+
+        $this->assertSame($expectedMessage, $e->getMessage());
+    }
+
+    public function basicsProvider()
+    {
+        return [
+            [
+                [], 'Syntax error'
+            ]
+        ];
+    }
+}

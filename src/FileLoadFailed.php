@@ -11,5 +11,5 @@ namespace alcamo\exception;
  */
 class FileLoadFailed extends AbstractIoException
 {
-    NORMALIZED_MESSAGE = 'Failed to load {filename}';
+    public const NORMALIZED_MESSAGE = 'Failed to load {filename}';
 }

@@ -7,10 +7,10 @@ namespace alcamo\exception;
  *
  * Typically used in the magic method __call().
  */
-class MethodNotFound extends \BadMethodCallException
-    implements ExceptionInterface
+class MethodNotFound extends \BadMethodCallException implements
+    ExceptionInterface
 {
     use ExceptionTrait;
 
-    NORMALIZED_MESSAGE = 'Method {method} not found';
+    public const NORMALIZED_MESSAGE = 'Method {method} not found';
 }

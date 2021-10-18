@@ -9,5 +9,5 @@ namespace alcamo\exception;
  */
 class SyntaxError extends AbstractDataException
 {
-    NORMALIZED_MESSAGE = 'Syntax error';
+    public const NORMALIZED_MESSAGE = 'Syntax error';
 }
