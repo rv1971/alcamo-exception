@@ -17,4 +17,32 @@ class OutOfRange extends \UnexpectedValueException implements
         'lowerBound' => '-∞',
         'upperBound' => '∞'
     ];
+
+    /**
+     * @brief Throw if $value outside [$lowerBound, $upperBound]
+     *
+     * @param $lowerBound lower bound, ignored if `null`
+     *
+     * @param $upperBound upper bound, ignored if `null`
+     */
+    public static function throwIfOutside(
+        $value,
+        $lowerBound,
+        $upperBound,
+        ?array $context
+    ): void {
+        if (
+            isset($lowerBound) && $value < $lowerBound
+            || isset($upperBound) && $value > $upperBound
+        ) {
+            throw (new self())->setMessageContext(
+                [
+                    'value' => $value,
+                    'lowerBound' => $lowerBound,
+                    'upperBound' => $upperBound
+                ]
+                + (array)$context
+            );
+        }
+    }
 }

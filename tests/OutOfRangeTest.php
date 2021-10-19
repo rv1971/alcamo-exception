@@ -49,4 +49,76 @@ class OutOfRangeTest extends TestCase
             ]
         ];
     }
+
+    /**
+     * @dataProvider throwIfOutsideProvider
+     */
+    public function testThrowIfOutside(
+        $expectedContext,
+        $value,
+        $lowerBound,
+        $upperBound,
+        $context
+    ) {
+        if (isset($expectedContext)) {
+            try {
+                OutOfRange::throwIfOutside(
+                    $value,
+                    $lowerBound,
+                    $upperBound,
+                    $context
+                );
+            } catch (OutOfRange $e) {
+                $this->assertSame($expectedContext, $e->getMessageContext());
+
+                return;
+            }
+
+            throw new Exception('No exception thrown.');
+        } else {
+            OutOfRange::throwIfOutside(
+                $value,
+                $lowerBound,
+                $upperBound,
+                $context
+            );
+
+            $this->assertTrue(true);
+        }
+    }
+
+    public function throwIfOutsideProvider()
+    {
+        return [
+            [
+                null, 1, 0, null, null
+            ],
+            [
+                null, 0, -7, 12, [ 'atUri' => '/somewhere' ]
+            ],
+            [
+                [
+                    'value' => 1,
+                    'lowerBound' => 2,
+                    'upperBound' => 42,
+                ],
+                1,
+                2,
+                42,
+                null
+            ],
+            [
+                [
+                    'value' => -7,
+                    'lowerBound' => -43,
+                    'upperBound' => -8,
+                    'atLine' => 17
+                ],
+                -7,
+                -43,
+                -8,
+                [ 'atLine' => 17 ]
+            ]
+        ];
+    }
 }
