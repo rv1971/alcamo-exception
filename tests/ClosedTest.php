@@ -4,10 +4,6 @@ namespace alcamo\exception;
 
 use PHPUnit\Framework\TestCase;
 
-class Foo
-{
-}
-
 class ClosedTest extends TestCase
 {
     /**
@@ -25,10 +21,9 @@ class ClosedTest extends TestCase
         return [
             [
                 [
-                    'object' => new Foo(),
                     'atUri' => 'http:://closed.example.org'
                 ],
-                'Attempt to use closed object <alcamo\exception\Foo>'
+                'Attempt to use closed object <alcamo\exception\ClosedTest>'
                 . ' at URI "http:://closed.example.org"'
             ]
         ];
