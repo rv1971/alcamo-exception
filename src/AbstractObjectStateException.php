@@ -11,7 +11,11 @@ abstract class AbstractObjectStateException extends ProgramFlowException
     public function setMessageContext(array $context): ExceptionInterface
     {
         if (!isset($context['object'])) {
-            $context['object'] = \debug_backtrace()[2]['object'];
+            // if called from constructor, go back one step further
+            $backtraceLevel =
+                \debug_backtrace()[1]['object'] instanceof self ? 2 : 1;
+
+            $context['object'] = \debug_backtrace()[$backtraceLevel]['object'];
         }
 
         return parent::setMessageContext($context);
