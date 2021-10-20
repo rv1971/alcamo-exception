@@ -46,12 +46,18 @@ trait ExceptionTrait
                 return '<' . get_class($value) . '>';
 
             default:
+                $result = is_object($value)
+                    ? '<' . get_class($value) . '>'
+                    : '';
+
                 $value = (string)$value;
 
                 if (isset($maxLength) && strlen($value) > $maxLength) {
-                    return '"' . substr($value, 0, $maxLength - 3) . '..."';
+                    return $result
+                        . '"' . substr($value, 0, $maxLength - 3) . '..."';
                 } else {
-                    return "\"$value\"";
+                    return $result
+                        . "\"$value\"";
                 }
         }
     }
