@@ -21,7 +21,7 @@ class MethodNotFoundTest extends TestCase
         return [
             [
                 [ 'method' => 'runFooo' ],
-                'Method "runFooo" not found'
+                'Method "runFooo" not found in object <' . self::class . '>'
             ]
         ];
     }
