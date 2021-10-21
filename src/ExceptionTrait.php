@@ -62,7 +62,8 @@ trait ExceptionTrait
                 /* In the following cases it is known that $value can be
                  * converted to string. */
 
-                // neither quote not shorten
+                // neither quote nor shorten
+            case $placeholder == 'extraMessage':
             case $placeholder == 'objectType':
                 return (string)$value;
 
