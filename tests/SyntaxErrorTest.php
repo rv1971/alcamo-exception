@@ -24,4 +24,20 @@ class SyntaxErrorTest extends TestCase
             ]
         ];
     }
+
+    public function testNewFromPrevious()
+    {
+        $previous = new \Exception('Lorem ipsum', 1234);
+
+        $e = SyntaxError::newFromPrevious($previous, [ 'atLine' => 42 ]);
+
+        $this->assertSame(
+            'Syntax error at line 42; Lorem ipsum',
+            $e->getMessage()
+        );
+
+        $this->assertSame($previous->getCode(), $e->getCode());
+
+        $this->assertSame($previous, $e->getPrevious());
+    }
 }

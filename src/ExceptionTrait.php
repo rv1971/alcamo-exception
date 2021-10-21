@@ -11,6 +11,19 @@ trait ExceptionTrait
 {
     use NormalizedExceptionTrait;
 
+    /// Create from previous exception, using contents of previous
+    public static function newFromPrevious(
+        \Throwable $previous,
+        ?array $context
+    ): self {
+        return new static(
+            null,
+            $previous->getCode(),
+            $previous,
+            (array)$context + [ 'extraMessage' => $previous->getMessage() ]
+        );
+    }
+
     /// Transform a value to a string for display in messages
     public static function value2string(
         $value,
