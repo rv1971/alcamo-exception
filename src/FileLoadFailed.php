@@ -7,7 +7,8 @@ namespace alcamo\exception;
  *
  * Beware of confusion with FileNotFound. FileNotFound is thrown when it has
  * come out that a file does not exist. FileLoadFailed is thrown if a file
- * probably exists but nonetheless could not be loaded.
+ * probably exists but nonetheless could not be loaded, typically because it
+ * could not be parsed.
  */
 class FileLoadFailed extends AbstractIoException
 {
