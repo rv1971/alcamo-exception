@@ -22,7 +22,10 @@ class ReadonlyViolation extends \LogicException implements ExceptionInterface
             $backtraceLevel =
                 \debug_backtrace()[1]['object'] instanceof self ? 2 : 1;
 
-            if (!isset($context['object'])) {
+            if (
+                !isset($context['object'])
+                && isset(\debug_backtrace()[$backtraceLevel]['object'])
+            ) {
                 $context['object'] =
                     \debug_backtrace()[$backtraceLevel]['object'];
             }
