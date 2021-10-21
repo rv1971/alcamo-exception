@@ -2,6 +2,7 @@
 
 namespace alcamo\exception;
 
+use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 
 class ClosedTest extends TestCase
@@ -21,7 +22,7 @@ class ClosedTest extends TestCase
         return [
             [
                 [
-                    'atUri' => 'http:://closed.example.org'
+                    'atUri' => new Uri('http:://closed.example.org')
                 ],
                 'Attempt to use closed object <alcamo\exception\ClosedTest>'
                 . ' at URI "http:://closed.example.org"'

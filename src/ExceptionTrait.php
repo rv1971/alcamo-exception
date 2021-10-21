@@ -27,6 +27,7 @@ trait ExceptionTrait
     /// Transform a value to a string for display in messages
     public static function value2string(
         $value,
+        string $placeholder,
         ?int $maxLength = null
     ): string {
         switch (true) {
@@ -37,7 +38,7 @@ trait ExceptionTrait
                 $valueStrings = [];
 
                 foreach ($value as $item) {
-                    $valueStrings[] = static::value2string($item);
+                    $valueStrings[] = static::value2string($item, $placeholder);
                 }
 
                 $value = implode(', ', $valueStrings);
@@ -58,6 +59,18 @@ trait ExceptionTrait
             case is_object($value) && !method_exists($value, '__toString'):
                 return '<' . get_class($value) . '>';
 
+                /* In the following cases it is known that $value can be
+                 * converted to string. */
+
+                // neither quote not shorten
+            case $placeholder == 'objectType':
+                return (string)$value;
+
+                // quote but do not shorten
+            case $placeholder == 'atUri':
+                return "\"$value\"";
+
+                // prepend object type, if any, quote and shorten
             default:
                 $result = is_object($value)
                     ? '<' . get_class($value) . '>'
@@ -88,21 +101,11 @@ trait ExceptionTrait
 
         /// Replace context values into placeholders
         foreach ($context as $placeholder => $value) {
-            $valueString =
-                static::value2string($context[$placeholder], $maxLength);
-
-            switch ($placeholder) {
-                case 'objectType':
-                    if ($valueString[0] == '"' && $valueString[-1] == '"') {
-                        $valueString = substr(
-                            $valueString,
-                            1,
-                            strlen($valueString) - 2
-                        );
-                    }
-
-                    break;
-            }
+            $valueString = static::value2string(
+                $context[$placeholder],
+                $placeholder,
+                $maxLength
+            );
 
             $replacements['{' . $placeholder . '}'] = $valueString;
         }
@@ -121,8 +124,11 @@ trait ExceptionTrait
                 isset($context[$placeholder])
                 && strpos($normalizedMessage, "{$placeholder}") === false
             ) {
-                $valueString =
-                    static::value2string($context[$placeholder], $maxLength);
+                $valueString = static::value2string(
+                    $context[$placeholder],
+                    $placeholder,
+                    $maxLength
+                );
 
                 /** If the context contains an `atOffset` key, also the data
                  *  fragment starting at that offset is added to the
@@ -132,8 +138,10 @@ trait ExceptionTrait
                         $message .= sprintf($fragment, $valueString);
 
                         if (isset($context['inData'])) {
-                            $dataString =
-                                static::value2string($context['inData']);
+                            $dataString = static::value2string(
+                                $context['inData'],
+                                'inData'
+                            );
 
                             if ($dataString[0] == '"') {
                                 $offendingDataString = substr(
