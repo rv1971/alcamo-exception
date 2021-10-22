@@ -73,4 +73,35 @@ class AbsoluteUriNeededTest extends TestCase
             ]
         ];
     }
+
+    public function testAddMessageContext()
+    {
+        $e =  (new AbsoluteUriNeeded())->setMessageContext(
+            [
+                'uri' => 'foo.html',
+                'inMethod' => 'runFoo',
+                'extraMessage' => 'dolor sit amet'
+            ]
+        );
+
+        $this->assertSame(
+            'Relative URI "foo.html" given where absolute URI is needed'
+            . ' in method "runFoo"; dolor sit amet',
+            $e->getMessage()
+        );
+
+        $e->addMessageContext(
+            [
+                'uri' => 'bar.html',
+                'extraMessage' => 'consetetur sadipscing elitr',
+                'inData' => (object)[]
+            ]
+        );
+
+        $this->assertSame(
+            'Relative URI "bar.html" given where absolute URI is needed'
+            . ' in method "runFoo" in <stdClass>; consetetur sadipscing elitr',
+            $e->getMessage()
+        );
+    }
 }

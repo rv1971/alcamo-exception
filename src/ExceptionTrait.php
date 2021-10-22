@@ -201,13 +201,36 @@ trait ExceptionTrait
         $this->setMessageContext($context);
     }
 
-    /// Set @ref messageContext and @ref $message, then return $this
+    /**
+     * @brief Set @ref messageContext
+     *
+     * Then recompute the message and return $this.
+     */
     public function setMessageContext(array $context): ExceptionInterface
     {
         $this->messageContext = $context
             + (defined('static::DEFAULT_MESSAGE_CONTEXT')
                ? static::DEFAULT_MESSAGE_CONTEXT
                : Constants::DEFAULT_MESSAGE_CONTEXT);
+
+        $this->message = static::normalizedMessage2Message(
+            $this->normalizedMessage,
+            $this->messageContext
+        );
+
+        return $this;
+    }
+
+    /**
+     * @brief Add data to @ref messageContext
+     *
+     * Existing data in @ref messageContext may be overwritten.
+     *
+     * Then recompute the message and return $this.
+     */
+    public function addMessageContext(array $context): ExceptionInterface
+    {
+        $this->messageContext = $context + $this->messageContext;
 
         $this->message = static::normalizedMessage2Message(
             $this->normalizedMessage,
