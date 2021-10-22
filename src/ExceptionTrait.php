@@ -27,7 +27,7 @@ trait ExceptionTrait
     /// Transform a value to a string for display in messages
     public static function value2string(
         $value,
-        string $placeholder,
+        ?int $flags = null,
         ?int $maxLength = null
     ): string {
         switch (true) {
@@ -38,7 +38,7 @@ trait ExceptionTrait
                 $valueStrings = [];
 
                 foreach ($value as $item) {
-                    $valueStrings[] = static::value2string($item, $placeholder);
+                    $valueStrings[] = static::value2string($item, $flags);
                 }
 
                 $value = implode(', ', $valueStrings);
@@ -62,13 +62,10 @@ trait ExceptionTrait
                 /* In the following cases it is known that $value can be
                  * converted to string. */
 
-                // neither quote nor shorten
-            case $placeholder == 'extraMessage':
-            case $placeholder == 'objectType':
+            case $flags & Constants::NO_QUOTE && $flags & Constants::NO_SHORTEN:
                 return (string)$value;
 
-                // quote but do not shorten
-            case $placeholder == 'atUri':
+            case $flags & Constants::NO_SHORTEN:
                 return "\"$value\"";
 
                 // prepend object type, if any, quote and shorten
@@ -80,13 +77,19 @@ trait ExceptionTrait
                 $value = (string)$value;
 
                 if (isset($maxLength) && strlen($value) > $maxLength) {
-                    return $result
-                        . '"' . substr($value, 0, $maxLength - 3) . '..."';
-                } else {
-                    return $result
-                        . "\"$value\"";
+                    $value = substr($value, 0, $maxLength - 3) . '...';
                 }
+
+                return $flags & Constants::NO_QUOTE ? $value : "\"$value\"";
         }
+    }
+
+    /// Get flags for a placeholder
+    public static function getFlags($placeholder): ?int
+    {
+        return defined('static::PLACEHOLDER_FLAGS')
+            ? (static::PLACEHOLDER_FLAGS[$placeholder] ?? null)
+            : (Constants::PLACEHOLDER_FLAGS[$placeholder] ?? null);
     }
 
     /// Create a message from a normalized message
@@ -104,7 +107,7 @@ trait ExceptionTrait
         foreach ($context as $placeholder => $value) {
             $valueString = static::value2string(
                 $context[$placeholder],
-                $placeholder,
+                static::getFlags($placeholder),
                 $maxLength
             );
 
@@ -127,7 +130,7 @@ trait ExceptionTrait
             ) {
                 $valueString = static::value2string(
                     $context[$placeholder],
-                    $placeholder,
+                    static::getFlags($placeholder),
                     $maxLength
                 );
 
@@ -141,7 +144,7 @@ trait ExceptionTrait
                         if (isset($context['inData'])) {
                             $dataString = static::value2string(
                                 $context['inData'],
-                                'inData'
+                                static::getFlags('inData')
                             );
 
                             if ($dataString[0] == '"') {

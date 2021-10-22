@@ -21,7 +21,7 @@ class ReadonlyViolationTest extends TestCase
         } catch (ReadonlyViolation $e) {
             $this->assertSame(
                 'Attempt to modify readonly object <alcamo\exception\Baz>'
-                . ' in method "throwReadonlyViolation"',
+                . ' in method throwReadonlyViolation()',
                 $e->getMessage()
             );
 
