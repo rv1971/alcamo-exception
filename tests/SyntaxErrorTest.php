@@ -20,7 +20,7 @@ class SyntaxErrorTest extends TestCase
     {
         return [
             [
-                [], 'Syntax error'
+                [ 'inData' => "\x00\r\n" ], 'Syntax error in "\000\r\n"'
             ]
         ];
     }

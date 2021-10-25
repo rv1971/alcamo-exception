@@ -80,10 +80,10 @@ class MessageBuilder
             case $flags & self::NO_QUOTE
                 && $flags & self::NO_SHORTEN
                 && $flags & self::NO_CLASS:
-                return (string)$value;
+                return addcslashes($value, "\0..\37");
 
             case $flags & self::NO_SHORTEN && $flags & self::NO_CLASS:
-                return "\"$value\"";
+                return '"' . addcslashes($value, "\0..\37") . '"';
 
                 // prepend object type, if any, quote and shorten
             default:
@@ -91,7 +91,7 @@ class MessageBuilder
                     ? '<' . get_class($value) . '>'
                     : '';
 
-                $value = (string)$value;
+                $value = addcslashes($value, "\0..\37");
 
                 if (
                     !($flags & self::NO_SHORTEN)
