@@ -54,7 +54,7 @@ class AbsoluteUriNeededTest extends TestCase
                     'inMethod' => 'runFoo',
                     'extraMessage' => 'lorem ipsum'
                 ],
-                'Relative URI "baz.php?x=1" given'
+                'Relative URI <GuzzleHttp\Psr7\Uri>"baz.php?x=1" given'
                 . ' where absolute URI is needed'
                 . ' in method runFoo()'
                 . ' in [3, 5, "baz.php?x=1", 7.11, <null>, <t...]'

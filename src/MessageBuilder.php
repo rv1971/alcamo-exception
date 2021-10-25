@@ -87,7 +87,7 @@ class MessageBuilder
 
                 // prepend object type, if any, quote and shorten
             default:
-                $result = is_object($value) && !($flags & self::NO_CLASS)
+                $typeLiteral = is_object($value) && !($flags & self::NO_CLASS)
                     ? '<' . get_class($value) . '>'
                     : '';
 
@@ -100,7 +100,8 @@ class MessageBuilder
                     $value = substr($value, 0, $maxLength - 3) . '...';
                 }
 
-                return $flags & self::NO_QUOTE ? $value : "\"$value\"";
+                return $typeLiteral
+                    . ($flags & self::NO_QUOTE ? $value : "\"$value\"");
         }
     }
 
