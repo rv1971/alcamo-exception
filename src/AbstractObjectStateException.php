@@ -8,8 +8,10 @@ abstract class AbstractObjectStateException extends ProgramFlowException
     public const DEFAULT_MESSAGE_CONTEXT = [ 'objectType' => 'object' ];
 
     /// Get object from backtrace if not given
-    public function setMessageContext(array $context): ExceptionInterface
-    {
+    public function setMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
         if (!isset($context['object'])) {
             // if called from constructor, go back one step further
             $backtraceLevel =
@@ -18,6 +20,6 @@ abstract class AbstractObjectStateException extends ProgramFlowException
             $context['object'] = \debug_backtrace()[$backtraceLevel]['object'];
         }
 
-        return parent::setMessageContext($context);
+        return parent::setMessageContext($context, $messageFactory);
     }
 }

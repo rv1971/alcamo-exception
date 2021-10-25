@@ -16,8 +16,10 @@ class InvalidType extends \UnexpectedValueException implements
 
     /** If `type` is not given in the context but `value` is, add the class or
      *  type of `value` as `type`. */
-    public function setMessageContext(array $context): ExceptionInterface
-    {
+    public function setMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
         if (!isset($context['type']) && isset($context['value'])) {
             $value = $context['value'];
 
@@ -25,6 +27,6 @@ class InvalidType extends \UnexpectedValueException implements
                 is_object($value) ? get_class($value) : gettype($value);
         }
 
-        return $this->parentSetMessageContext($context);
+        return $this->parentSetMessageContext($context, $messageFactory);
     }
 }

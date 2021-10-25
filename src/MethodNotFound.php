@@ -18,8 +18,10 @@ class MethodNotFound extends \BadMethodCallException implements
         'Method {method} not found in object {object}';
 
     /// Get object from backtrace if not given
-    public function setMessageContext(array $context): ExceptionInterface
-    {
+    public function setMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
         if (!isset($context['object'])) {
             // if called from constructor, go back one step further
             $backtraceLevel =
@@ -28,6 +30,6 @@ class MethodNotFound extends \BadMethodCallException implements
             $context['object'] = \debug_backtrace()[$backtraceLevel]['object'];
         }
 
-        return $this->parentSetMessageContext($context);
+        return $this->parentSetMessageContext($context, $messageFactory);
     }
 }

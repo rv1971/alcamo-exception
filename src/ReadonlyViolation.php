@@ -15,8 +15,10 @@ class ReadonlyViolation extends \LogicException implements ExceptionInterface
         'Attempt to modify readonly object {object}';
 
     /// Get object and method from backtrace if not given
-    public function setMessageContext(array $context): ExceptionInterface
-    {
+    public function setMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
         if (isset(\debug_backtrace()[1]['object'])) {
             // if called from constructor, go back one step further
             $backtraceLevel =
@@ -36,6 +38,6 @@ class ReadonlyViolation extends \LogicException implements ExceptionInterface
             }
         }
 
-        return $this->parentSetMessageContext($context);
+        return $this->parentSetMessageContext($context, $messageFactory);
     }
 }

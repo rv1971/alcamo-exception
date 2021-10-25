@@ -5,6 +5,17 @@ namespace alcamo\exception;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\TestCase;
 
+class SpaceMessageFactory extends MessageFactory
+{
+    public const PLACEHOLDER_FLAGS = parent::PLACEHOLDER_FLAGS + [
+        'onPlanet' => self::NO_QUOTE
+    ];
+
+    public const MESSAGE_FRAGMENT_MAP = parent::MESSAGE_FRAGMENT_MAP + [
+        'onPlanet' => ' on planet %s'
+    ];
+}
+
 class AbsoluteUriNeededTest extends TestCase
 {
     /**
@@ -21,7 +32,8 @@ class AbsoluteUriNeededTest extends TestCase
             $normalizedMessage,
             $code,
             $previous,
-            $context
+            $context,
+            new SpaceMessageFactory()
         );
 
         $this->assertSame($code, $e->getCode());
@@ -52,13 +64,14 @@ class AbsoluteUriNeededTest extends TestCase
                     'atOffset' => 2,
                     'inData' => [ 3, 5, 'baz.php?x=1', 7.11, null, true ],
                     'inMethod' => 'runFoo',
-                    'extraMessage' => 'lorem ipsum'
+                    'extraMessage' => 'lorem ipsum',
+                    'onPlanet' => 'Earth'
                 ],
                 'Relative URI <GuzzleHttp\Psr7\Uri>"baz.php?x=1" given'
                 . ' where absolute URI is needed'
                 . ' in method runFoo()'
                 . ' in [3, 5, "baz.php?x=1", 7.11, <null>, <t...]'
-                . ' at offset 2; lorem ipsum'
+                . ' at offset 2; lorem ipsum on planet Earth'
             ],
             [
                 'Custom exception of type {foo}',
@@ -94,13 +107,23 @@ class AbsoluteUriNeededTest extends TestCase
             [
                 'uri' => 'bar.html',
                 'extraMessage' => 'consetetur sadipscing elitr',
-                'inData' => (object)[]
+                'inData' => (object)[],
+                'onPlanet' => 'Mercury'
             ]
         );
 
         $this->assertSame(
             'Relative URI "bar.html" given where absolute URI is needed'
             . ' in method runFoo() in <stdClass>; consetetur sadipscing elitr',
+            $e->getMessage()
+        );
+
+        $e->addMessageContext([], new SpaceMessageFactory());
+
+        $this->assertSame(
+            'Relative URI "bar.html" given where absolute URI is needed'
+            . ' in method runFoo() in <stdClass>; consetetur sadipscing elitr'
+            . ' on planet Mercury',
             $e->getMessage()
         );
     }

@@ -2,8 +2,8 @@
 
 namespace alcamo\exception;
 
-/// Exception message builder
-class MessageBuilder
+/// Exception message factory
+class MessageFactory implements MessageFactoryInterface
 {
     /// Maximum length of values when replaced into messages
     public const MAX_VALUE_LENGTH = 40;
@@ -106,10 +106,10 @@ class MessageBuilder
     }
 
     /// Create a message from a normalized message
-    public function normalizedMessage2Message(
+    public function createMessage(
         string $normalizedMessage,
         array $context
-    ) {
+    ): string {
         $replacements = [];
 
         $maxLength = static::MAX_VALUE_LENGTH;

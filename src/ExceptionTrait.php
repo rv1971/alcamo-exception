@@ -11,16 +11,20 @@ trait ExceptionTrait
 {
     use NormalizedExceptionTrait;
 
+    protected $messageFactory_; ///< MessageFactoryInterface
+
     /// Create from previous exception, using contents of previous
     public static function newFromPrevious(
         \Throwable $previous,
-        ?array $context
+        ?array $context,
+        ?MessageFactoryInterface $messageFactory = null
     ): self {
         return new static(
             null,
             $previous->getCode(),
             $previous,
-            (array)$context + [ 'extraMessage' => $previous->getMessage() ]
+            (array)$context + [ 'extraMessage' => $previous->getMessage() ],
+            $messageFactory
         );
     }
 
@@ -28,14 +32,18 @@ trait ExceptionTrait
         ?string $normalizedMessage = null,
         int $code = 0,
         \Throwable $previous = null,
-        array $context = []
+        array $context = [],
+        ?MessageFactoryInterface $messageFactory = null
     ) {
         $this->normalizedMessage =
             $normalizedMessage ?? static::NORMALIZED_MESSAGE;
 
         parent::__construct('', $code, $previous);
 
-        $this->setMessageContext($context);
+        $this->setMessageContext(
+            $context,
+            $messageFactory ?? new MessageFactory()
+        );
     }
 
     /**
@@ -43,15 +51,24 @@ trait ExceptionTrait
      *
      * Then rebuild the denormalized message and return $this.
      */
-    public function setMessageContext(array $context): ExceptionInterface
-    {
+    public function setMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
+        if (isset($messageFactory)) {
+            $this->messageFactory_ = $messageFactory;
+        }
+
         $this->messageContext = $context;
 
         if (defined('static::DEFAULT_MESSAGE_CONTEXT')) {
             $this->messageContext += static::DEFAULT_MESSAGE_CONTEXT;
         }
 
-        $this->rebuildMessage();
+        $this->message = $this->messageFactory_->createMessage(
+            $this->normalizedMessage,
+            $this->messageContext
+        );
 
         return $this;
     }
@@ -63,21 +80,21 @@ trait ExceptionTrait
      *
      * Then rebuild the denormalized message and return $this.
      */
-    public function addMessageContext(array $context): ExceptionInterface
-    {
+    public function addMessageContext(
+        array $context,
+        ?MessageFactoryInterface $messageFactory = null
+    ): ExceptionInterface {
+        if (isset($messageFactory)) {
+            $this->messageFactory_ = $messageFactory;
+        }
+
         $this->messageContext = $context + $this->messageContext;
 
-        $this->rebuildMessage();
-
-        return $this;
-    }
-
-    /// Rebuild the denormalized message
-    protected function rebuildMessage(): void
-    {
-        $this->message = (new MessageBuilder())->normalizedMessage2Message(
+        $this->message = $this->messageFactory_->createMessage(
             $this->normalizedMessage,
             $this->messageContext
         );
+
+        return $this;
     }
 }
