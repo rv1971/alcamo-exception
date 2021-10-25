@@ -31,7 +31,7 @@ class EofTest extends TestCase
                     'requestedUnits' => 12
                 ],
                 'Failed to read 12 unit(s) from data source <alcamo\exception\Bar>'
-                . ', only 7 units available'
+                . ', only 7 unit(s) available'
             ]
         ];
     }

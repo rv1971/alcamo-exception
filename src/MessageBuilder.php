@@ -28,7 +28,7 @@ class MessageBuilder
      */
     public const MESSAGE_FRAGMENT_MAP = [
         'expectedOneOf'  => ', expected one of %s',
-        'availableUnits' => ', only %s units available',
+        'availableUnits' => ', only %s unit(s) available',
         'inMode'         => ' in mode %s',
         'inMethod'       => ' in method %s()',
         'inData'         => ' in %s',
