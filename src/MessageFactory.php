@@ -16,6 +16,7 @@ class MessageFactory implements MessageFactoryInterface
     public const PLACEHOLDER_FLAGS = [
         'atUri'        => self::NO_SHORTEN | self::NO_CLASS,
         'extraMessage' => self::NO_QUOTE | self::NO_SHORTEN | self::NO_CLASS,
+        'filename'     => self::NO_SHORTEN,
         'inMethod'     => self::NO_QUOTE | self::NO_CLASS,
         'objectType'   => self::NO_QUOTE | self::NO_SHORTEN | self::NO_CLASS
     ];
