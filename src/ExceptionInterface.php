@@ -17,6 +17,7 @@ namespace alcamo\exception;
 
 use Wikimedia\NormalizedException\INormalizedException;
 
+/// Provide setMessageContext()
 interface ExceptionInterface extends INormalizedException
 {
     public function setMessageContext(array $context): self;
