@@ -21,4 +21,6 @@ use Wikimedia\NormalizedException\INormalizedException;
 interface ExceptionInterface extends INormalizedException
 {
     public function setMessageContext(array $context): self;
+
+    public function addMessageContext(array $context): self;
 }
