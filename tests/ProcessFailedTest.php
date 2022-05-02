@@ -22,9 +22,9 @@ class ProcessFailedTest extends TestCase
             [
                 [
                     'command' => '/usr/local/bin/foo',
-                    'inMode' => 'in'
+                    'inDirectory' => '/home/alice'
                 ],
-                'Process "/usr/local/bin/foo" failed in mode "in"'
+                'Process "/usr/local/bin/foo" failed in directory "/home/alice"'
             ],
             [
                 [

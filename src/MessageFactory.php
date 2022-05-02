@@ -37,6 +37,7 @@ class MessageFactory implements MessageFactoryInterface
         'atOffset'       => ' at offset %s',
         'inPlaces'       => ' in %s',
         'atUri'          => ' at URI %s',
+        'inDirectory'    => ' in directory %s',
         'extraMessage'   => '; %s'
     ];
 
