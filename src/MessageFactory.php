@@ -18,6 +18,7 @@ class MessageFactory implements MessageFactoryInterface
         'extraMessage' => self::NO_QUOTE | self::NO_SHORTEN | self::NO_CLASS,
         'filename'     => self::NO_SHORTEN,
         'inMethod'     => self::NO_QUOTE | self::NO_CLASS,
+        'inTable'      => self::NO_SHORTEN,
         'objectType'   => self::NO_QUOTE | self::NO_SHORTEN | self::NO_CLASS
     ];
 
@@ -38,6 +39,8 @@ class MessageFactory implements MessageFactoryInterface
         'inPlaces'       => ' in %s',
         'atUri'          => ' at URI %s',
         'inDirectory'    => ' in directory %s',
+        'inTable'        => ' in table %s',
+        'forKey'         => ' for key %s',
         'extraMessage'   => '; %s'
     ];
 
