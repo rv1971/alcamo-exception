@@ -16,7 +16,7 @@ trait ExceptionTrait
     /// Create from previous exception, using contents of previous
     public static function newFromPrevious(
         \Throwable $previous,
-        ?array $context,
+        ?array $context = null,
         ?MessageFactoryInterface $messageFactory = null
     ): self {
         return new static(
