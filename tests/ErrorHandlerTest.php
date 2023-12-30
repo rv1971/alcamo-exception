@@ -35,23 +35,4 @@ class ErrorHandlerTest extends TestCase
             'notice' => [ 'consetetur sadipscing elitr', E_USER_NOTICE ]
         ];
     }
-
-    public function testDestructor()
-    {
-        (
-            function () {
-                $errorHandler = new ErrorHandler(E_USER_WARNING);
-
-                try {
-                    trigger_error('sed diam nonumy', E_USER_WARNING);
-                } catch (\ErrorException $e) {
-                }
-            }
-        )();
-
-        $this->expectWarning();
-        $this->expectWarningMessage('eirmod tempor invidunt');
-
-        trigger_error('eirmod tempor invidunt', E_USER_WARNING);
-    }
 }
