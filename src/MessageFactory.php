@@ -63,8 +63,8 @@ class MessageFactory implements MessageFactoryInterface
 
                 $value = implode(', ', $valueStrings);
 
-                if (isset($maxLength) && strlen($value) > $maxLength) {
-                    return '[' . substr($value, 0, $maxLength - 3) . '...]';
+                if (isset($maxLength) && mb_strlen($value) > $maxLength) {
+                    return '[' . mb_substr($value, 0, $maxLength - 3) . '...]';
                 } else {
                     return "[$value]";
                 }
@@ -85,10 +85,10 @@ class MessageFactory implements MessageFactoryInterface
             case $flags & self::NO_QUOTE
                 && $flags & self::NO_SHORTEN
                 && $flags & self::NO_CLASS:
-                return addcslashes($value, "\0..\37");
+                return static::addslashes($value);
 
             case $flags & self::NO_SHORTEN && $flags & self::NO_CLASS:
-                return '"' . addcslashes($value, "\0..\37") . '"';
+                return '"' . static::addslashes($value) . '"';
 
                 // prepend object type, if any, quote and shorten
             default:
@@ -96,13 +96,13 @@ class MessageFactory implements MessageFactoryInterface
                     ? '<' . get_class($value) . '>'
                     : '';
 
-                $value = addcslashes($value, "\0..\37");
+                $value = static::addslashes($value);
 
                 if (
                     !($flags & self::NO_SHORTEN)
-                    && isset($maxLength) && strlen($value) > $maxLength
+                    && isset($maxLength) && mb_strlen($value) > $maxLength
                 ) {
-                    $value = substr($value, 0, $maxLength - 3) . '...';
+                    $value = mb_substr($value, 0, $maxLength - 3) . '...';
                 }
 
                 return $typeLiteral
@@ -188,5 +188,34 @@ class MessageFactory implements MessageFactoryInterface
         }
 
         return $message;
+    }
+
+    public function addslashes(string $string): string
+    {
+        /** Always mask control characters. */
+        $string = addcslashes($string, "\0..\37");
+
+        /** Also mask non-ASCII characters if string is no valid UTF-8. The
+         *  regexp is taken from [Multilingual form
+         *  encoding](https://www.w3.org/International/questions/qa-forms-utf-8.en). */
+        if (
+            preg_match(
+                '%^(?:
+      [\x09\x0A\x0D\x20-\x7E]            # ASCII
+    | [\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
+    | \xE0[\xA0-\xBF][\x80-\xBF]         # excluding overlongs
+    | [\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}  # straight 3-byte
+    | \xED[\x80-\x9F][\x80-\xBF]         # excluding surrogates
+    | \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
+    | [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
+    | \xF4[\x80-\x8F][\x80-\xBF]{2}      # plane 16
+)*$%xs',
+                $string
+            )
+        ) {
+            return $string;
+        } else {
+            return addcslashes($string, "\177..\377");
+        }
     }
 }
