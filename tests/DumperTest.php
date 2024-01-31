@@ -24,12 +24,14 @@ class DumperTest extends TestCase
 
         $e->qux = true;
 
+        $file = __FILE__;
+
         return [
             [
                 (new Unsupported())->setMessageContext([ 'feature' => 'foo' ]),
-                <<<'EOT'
-alcamo\exception\Unsupported
-  at /home/rizzardo/src/alcamo-exception/tests/DumperTest.php:29
+                <<<EOT
+alcamo\\exception\\Unsupported
+  at $file:31
   "foo" not supported
 * feature = "foo"
 
@@ -37,11 +39,11 @@ EOT
             ],
             [
                 $e,
-                <<<'EOT'
-alcamo\exception\ReadonlyViolation
-  at /home/rizzardo/src/alcamo-exception/tests/DumperTest.php:21
-  Attempt to modify readonly object "$barBaz" in method dumpProvider()
-* object = "$barBaz"
+                <<<EOT
+alcamo\\exception\\ReadonlyViolation
+  at $file:21
+  Attempt to modify readonly object "\$barBaz" in method dumpProvider()
+* object = "\$barBaz"
 * inMethod = "dumpProvider"
 * qux = <true>
 
