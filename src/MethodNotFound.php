@@ -6,6 +6,8 @@ namespace alcamo\exception;
  * @brief Exception thrown when attempting to call a non-existent method.
  *
  * Typically used in the magic method __call().
+ *
+ * @date Last reviewed 2025-10-07
  */
 class MethodNotFound extends \BadMethodCallException implements
     ExceptionInterface

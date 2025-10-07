@@ -2,7 +2,11 @@
 
 namespace alcamo\exception;
 
-/// Exception message factory
+/**
+ * @brief Exception message factory
+ *
+ * @date Last reviewed 2025-10-07
+ */
 class MessageFactory implements MessageFactoryInterface
 {
     /// Maximum length of values when replaced into messages
@@ -121,13 +125,11 @@ class MessageFactory implements MessageFactoryInterface
 
         /// Replace context values into placeholders
         foreach ($context as $placeholder => $value) {
-            $valueString = static::value2string(
-                $context[$placeholder],
+            $replacements['{' . $placeholder . '}'] = static::value2string(
+                $value,
                 static::PLACEHOLDER_FLAGS[$placeholder] ?? null,
                 $maxLength
             );
-
-            $replacements['{' . $placeholder . '}'] = $valueString;
         }
 
         $message = strtr($normalizedMessage, $replacements);
@@ -190,6 +192,7 @@ class MessageFactory implements MessageFactoryInterface
         return $message;
     }
 
+    /// Mask nonprintable characters as needed.
     public function addslashes(string $string): string
     {
         /** Always mask control characters. */

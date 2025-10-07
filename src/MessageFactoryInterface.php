@@ -2,7 +2,11 @@
 
 namespace alcamo\exception;
 
-/// Exception message factory interface
+/**
+ * @brief Exception message factory interface
+ *
+ * @date Last reviewed 2025-10-07
+ */
 interface MessageFactoryInterface
 {
     public function createMessage(

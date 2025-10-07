@@ -4,6 +4,8 @@ namespace alcamo\exception;
 
 /**
  * @brief Exception thrown when a value was not of a valid type
+ *
+ * @date Last reviewed 2025-10-07
  */
 class InvalidType extends \UnexpectedValueException implements
     ExceptionInterface

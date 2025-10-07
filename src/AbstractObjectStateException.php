@@ -2,7 +2,11 @@
 
 namespace alcamo\exception;
 
-/// Exception related the state of an object
+/**
+ * @brief Exception related the state of an object
+ *
+ * @date Last reviewed 2025-10-07
+ */
 abstract class AbstractObjectStateException extends ProgramFlowException
 {
     public const DEFAULT_MESSAGE_CONTEXT = [ 'objectType' => 'object' ];

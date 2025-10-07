@@ -7,6 +7,8 @@ namespace alcamo\exception;
  *
  * Meant for situations where a piece of data was not found in a data storage
  * other than a file system.
+ *
+ * @date Last reviewed 2025-10-07
  */
 class DataNotFound extends AbstractDataException
 {

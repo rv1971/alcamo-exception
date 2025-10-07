@@ -2,7 +2,11 @@
 
 namespace alcamo\exception;
 
-/// Exception thrown by an attempt to open an already opened object
+/**
+ * @brief Exception thrown by an attempt to open an already opened object
+ *
+ * @date Last reviewed 2025-10-07
+ */
 class Opened extends AbstractObjectStateException
 {
     public const NORMALIZED_MESSAGE =

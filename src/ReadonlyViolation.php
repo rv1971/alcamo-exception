@@ -4,6 +4,8 @@ namespace alcamo\exception;
 
 /**
  * @brief Exception thrown by an attempt to write to a readonly object
+ *
+ * @date Last reviewed 2025-10-07
  */
 class ReadonlyViolation extends \LogicException implements ExceptionInterface
 {
