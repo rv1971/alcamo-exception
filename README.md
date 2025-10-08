@@ -1,7 +1,8 @@
-# Usage example
+# Usage examples
+
+## Predefined exception classes
 
 ~~~
-
 use alcamo\exception\InvalidEnumerator;
 
 try {
@@ -29,19 +30,57 @@ context based on settings in `MessageFactory`.
 
 A number of such predefined exception classes with default messages is
 provided, as well as a number of context item definitions. Both may
-easily be extened or modified.
+easily be extended or modified.
 
 Since the mechanism is based on the interface `ExceptionInterface` and
-the trait `ExceptionTrait`, it can easily be integarted into any
+the trait `ExceptionTrait`, it can easily be integrated into any
 existing exception class hierarchy.
+
+## Error handler
+
+~~~
+use alcamo\exception\ErrorHandler;
+
+public function foo()
+{
+    $handler = new ErrorHandler();
+~~~
+
+...
+Any error occurring here will throw an `ErrorException`.
+...
+
+~~~
+}
+~~~
+
+After leaving the scope, the `$handler` has been destroyed, hence
+previous error handling is restored.
+
+## Exception dumper
+
+~~~
+use alcamo\exception\Dumper;
+
+try {
+~~~
+...
+~~~
+} catch (\Throwable $e) {
+    echo (new Dumper())->dump($e);
+}
+~~~
+
+Reports the details of the exception. Useful, for instance, in
+command-line interfaces.
 
 
 # Supplied generic interfaces, traits and classes
 
-The following only explains what is neede to implement the mechanism
-illustrated above. The provided exception class are basically all
-trivial because they mainly consist of a class constant with a
-normalized message.
+The following only explains what is needed to implement the mechanism
+illustrated above. The provided predefined exception classes are
+basically all trivial because they mainly consist of a class constant
+with a normalized message.
 
 ## Interface `MessageFactoryInterface`
 
@@ -76,3 +115,16 @@ implementing `ExceptionInterface`. Uses `MessageFactory` (or any
 injected object that implements `MessageFactoryInterface`) to generate
 a message. The underlying normalized message can be taken from a class
 constant.
+
+## Class `ErrorHandler`
+
+Implements the RAAI pattern to establish an error handler function as
+long as the `ErrorHandler` object exists. The provided error handler
+function throws an `ErrorException` and can be overridden in derived
+classes.
+
+## Class `Dumper`
+
+Provides a method `dump()` to dump the details of a `Throwable` as
+multiline text. The pieces of output are created by individual methods
+so that it can easily be customized in derived classes.

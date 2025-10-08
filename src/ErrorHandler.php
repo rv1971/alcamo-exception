@@ -8,15 +8,15 @@ namespace alcamo\exception;
  * Implements the RAAI pattern: An error handler is set by creating an
  * instance of this class, and reset when the destructor is executed.
  *
- * @date Last reviewed 2021-06-07
+ * @date Last reviewed 2025-10-08
  */
 class ErrorHandler
 {
     /**
      * @brief The actual handler function
      *
-     * Must be static, otherwise the destructor would never be called. The
-     * parameters are explained in
+     * Must be static, otherwise the destructor would never be called because
+     * the object would never be destroyed. The parameters are explained in
      * [set_error_handler()](https://www.php.net/manual/en/function.set-error-handler).
      */
     public static function handler(

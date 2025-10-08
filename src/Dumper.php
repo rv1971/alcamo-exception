@@ -4,11 +4,18 @@ namespace alcamo\exception;
 
 use Wikimedia\NormalizedException\INormalizedException;
 
+/**
+ * @brief Dump the details on an exceptiona s multiline text.
+ *
+ * Includes context and public properties.
+ *
+ * @date Last reviewed 2025-10-08
+ */
 class Dumper
 {
-    private $messageFactory_; ///< MessageFactory
+    private $messageFactory_; ///< MessageFactoryInterface
 
-    public function __construct(?MessageFactory $messageFactory = null)
+    public function __construct(?MessageFactoryInterface $messageFactory = null)
     {
         $this->messageFactory_ = $messageFactory ?? new MessageFactory();
     }
@@ -20,7 +27,7 @@ class Dumper
             . "  {$this->dumpExceptionLocation($e)}\n"
             . "  {$e->getMessage()}\n";
 
-        if ($e instanceof ExceptionInterface) {
+        if ($e instanceof INormalizedException) {
             $result .= $this->dumpMessageContext($e);
         }
 
