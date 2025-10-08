@@ -46,9 +46,7 @@ public function foo()
     $handler = new ErrorHandler();
 ~~~
 
-...
-Any error occurring here will throw an `ErrorException`.
-...
+... any error occurring here will throw an `ErrorException` ...
 
 ~~~
 }
@@ -118,10 +116,11 @@ constant.
 
 ## Class `ErrorHandler`
 
-Implements the RAAI pattern to establish an error handler function as
-long as the `ErrorHandler` object exists. The provided error handler
-function throws an `ErrorException` and can be overridden in derived
-classes.
+Implements the [RAII
+pattern](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization)
+to establish an error handler function as long as the `ErrorHandler`
+object exists. The provided error handler function throws an
+`ErrorException` and can be overridden in derived classes.
 
 ## Class `Dumper`
 

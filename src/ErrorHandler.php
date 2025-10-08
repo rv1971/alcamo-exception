@@ -5,8 +5,9 @@ namespace alcamo\exception;
 /**
  * @brief Error handler that throws an error exception upon error
  *
- * Implements the RAAI pattern: An error handler is set by creating an
- * instance of this class, and reset when the destructor is executed.
+ * Implements the [RAII pattern](https://en.wikipedia.org/wiki/Resource_acquisition_is_initialization):
+ * An error handler is set by creating an instance of this class, and reset
+ * when the destructor is executed.
  *
  * @date Last reviewed 2025-10-08
  */
