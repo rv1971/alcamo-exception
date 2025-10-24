@@ -13,6 +13,7 @@ class AbsolutePathNeeded extends \UnexpectedValueException implements
 {
     use ExceptionTrait;
 
+    /// Normalized message, potentially containing placeholders
     public const NORMALIZED_MESSAGE =
         'Relative path {path} given where absolute path is needed';
 }

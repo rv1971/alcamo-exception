@@ -14,5 +14,6 @@ namespace alcamo\exception;
  */
 class FileLoadFailed extends AbstractIoException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Failed to load {filename}';
 }

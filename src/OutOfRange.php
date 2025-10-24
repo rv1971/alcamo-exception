@@ -12,9 +12,11 @@ class OutOfRange extends \UnexpectedValueException implements
 {
     use ExceptionTrait;
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Value {value} out of range [{lowerBound}, {upperBound}]';
 
+    /** @copydoc  alcamo::exception::AbstractObjectStateException::DEFAULT_MESSAGE_CONTEXT */
     public const DEFAULT_MESSAGE_CONTEXT = [
         'lowerBound' => '-∞',
         'upperBound' => '∞'
@@ -26,6 +28,8 @@ class OutOfRange extends \UnexpectedValueException implements
      * @param $lowerBound lower bound, ignored if `null`
      *
      * @param $upperBound upper bound, ignored if `null`
+     *
+     * Convenience method to throw an exception when needed.
      */
     public static function throwIfOutside(
         $value,

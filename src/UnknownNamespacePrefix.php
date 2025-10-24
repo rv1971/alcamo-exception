@@ -12,5 +12,6 @@ class UnknownNamespacePrefix extends \UnexpectedValueException implements
 {
     use ExceptionTrait;
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Unknown namespace prefix {prefix}';
 }

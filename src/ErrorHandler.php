@@ -14,7 +14,7 @@ namespace alcamo\exception;
 class ErrorHandler
 {
     /**
-     * @brief The actual handler function
+     * @brief The actual handler function which throws an exception
      *
      * Must be static, otherwise the destructor would never be called because
      * the object would never be destroyed. The parameters are explained in
@@ -26,7 +26,7 @@ class ErrorHandler
         string $errfile = null,
         int $errline = null
     ): void {
-        /** @throw ErrorException in each invocation. */
+        /** @throw alcamo::exception::ErrorException in each invocation. */
         throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 

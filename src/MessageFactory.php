@@ -16,7 +16,7 @@ class MessageFactory implements MessageFactoryInterface
     public const NO_SHORTEN = 2; ///< Do not shorten a string literal
     public const NO_CLASS   = 4; ///< Do not prepend object class to string
 
-    /// Flags for value2string()
+    /// Flags for valueToString()
     public const PLACEHOLDER_FLAGS = [
         'atUri'        => self::NO_SHORTEN | self::NO_CLASS,
         'extraMessage' => self::NO_QUOTE | self::NO_SHORTEN | self::NO_CLASS,
@@ -48,8 +48,16 @@ class MessageFactory implements MessageFactoryInterface
         'extraMessage'   => '; %s'
     ];
 
-    /// Transform a value to a string for display in messages
-    public function value2string(
+    /**
+     * @brief Transform a value to a string for display in messages
+     *
+     * @param $value Any value of any type.
+     *
+     * @param $flags OR-combination of the above class constant flags.
+     *
+     * @param $maxLength Maximum length of the returned string.
+     */
+    public function valueToString(
         $value,
         ?int $flags = null,
         ?int $maxLength = null
@@ -62,7 +70,7 @@ class MessageFactory implements MessageFactoryInterface
                 $valueStrings = [];
 
                 foreach ($value as $item) {
-                    $valueStrings[] = static::value2string($item, $flags);
+                    $valueStrings[] = static::valueToString($item, $flags);
                 }
 
                 $value = implode(', ', $valueStrings);
@@ -114,7 +122,7 @@ class MessageFactory implements MessageFactoryInterface
         }
     }
 
-    /// Create a message from a normalized message
+    /** @copydoc alcamo::exception::MessageFactoryInterface::createMessage() */
     public function createMessage(
         string $normalizedMessage,
         array $context
@@ -125,7 +133,7 @@ class MessageFactory implements MessageFactoryInterface
 
         /// Replace context values into placeholders
         foreach ($context as $placeholder => $value) {
-            $replacements['{' . $placeholder . '}'] = static::value2string(
+            $replacements['{' . $placeholder . '}'] = static::valueToString(
                 $value,
                 static::PLACEHOLDER_FLAGS[$placeholder] ?? null,
                 $maxLength
@@ -134,7 +142,7 @@ class MessageFactory implements MessageFactoryInterface
 
         $message = strtr($normalizedMessage, $replacements);
 
-        /** For each item in @ref MESSAGE_FRAGMENT_MAP, if the data element is
+        /** For each item in MESSAGE_FRAGMENT_MAP, if the data element is
          *  present in the context data *and has not yet been replaced* into
          *  the message, append the corresponding fragment. */
         foreach (static::MESSAGE_FRAGMENT_MAP as $placeholder => $fragment) {
@@ -142,21 +150,21 @@ class MessageFactory implements MessageFactoryInterface
                 isset($context[$placeholder])
                 && strpos($normalizedMessage, "{$placeholder}") === false
             ) {
-                $valueString = static::value2string(
+                $valueString = static::valueToString(
                     $context[$placeholder],
                     static::PLACEHOLDER_FLAGS[$placeholder] ?? null,
                     $maxLength
                 );
 
                 switch ($placeholder) {
-                    /** If the context contains an `atOffset` key, also the
-                     *  data fragment starting at that offset is added to the
+                    /** If the context contains an `atOffset` key, also add
+                     *  the data fragment starting at that offset to the
                      *  message. */
                     case 'atOffset':
                         $message .= sprintf($fragment, $valueString);
 
                         if (isset($context['inData'])) {
-                            $dataString = static::value2string(
+                            $dataString = static::valueToString(
                                 $context['inData'],
                                 static::PLACEHOLDER_FLAGS['inData'] ?? null
                             );
@@ -192,7 +200,7 @@ class MessageFactory implements MessageFactoryInterface
         return $message;
     }
 
-    /// Mask nonprintable characters as needed.
+    /// Mask nonprintable characters
     public function addslashes(string $string): string
     {
         /** Always mask control characters. */

@@ -16,5 +16,6 @@ namespace alcamo\exception;
  */
 class DataValidationFailed extends AbstractDataException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Validation failed';
 }

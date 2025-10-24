@@ -5,7 +5,7 @@ namespace alcamo\exception;
 use Wikimedia\NormalizedException\INormalizedException;
 
 /**
- * @brief Dump the details on an exceptiona s multiline text.
+ * @brief Dump the details on an exception as multiline text
  *
  * Includes context and public properties.
  *
@@ -20,7 +20,7 @@ class Dumper
         $this->messageFactory_ = $messageFactory ?? new MessageFactory();
     }
 
-    /// @return Multiline string with trailing newline
+    /** @return Multiline string with trailing newline */
     public function dump(\Throwable $e): string
     {
         $result = "{$this->dumpExceptionType($e)}\n"
@@ -46,26 +46,28 @@ class Dumper
         return "at {$e->getFile()}:{$e->getLine()}";
     }
 
+    /** @return Multiline string with trailing newline */
     public function dumpMessageContext(INormalizedException $e): string
     {
         $result = '';
 
         foreach ($e->getMessageContext() as $key => $value) {
             $result .= "* $key = "
-                . $this->messageFactory_->value2string($value)
+                . $this->messageFactory_->valueToString($value)
                 . "\n";
         }
 
         return $result;
     }
 
+    /** @return Multiline string with trailing newline */
     public function dumpExceptionProps(\Throwable $e): string
     {
         $result = '';
 
         foreach (get_object_vars($e) as $key => $value) {
             $result .= "* $key = "
-                . $this->messageFactory_->value2string($value)
+                . $this->messageFactory_->valueToString($value)
                 . "\n";
         }
 

@@ -9,5 +9,6 @@ namespace alcamo\exception;
  */
 class Underflow extends AbstractObjectStateException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Underflow in {objectType} {object}';
 }

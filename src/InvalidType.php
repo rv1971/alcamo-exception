@@ -14,10 +14,15 @@ class InvalidType extends \UnexpectedValueException implements
         ExceptionTrait::setMessageContext as parentSetMessageContext;
     }
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Invalid type {type}';
 
-    /** If `type` is not given in the context but `value` is, add the class or
-     *  type of `value` as `type`. */
+    /**
+     * @copydoc alcamo::exception::ExceptionInterface::setMessageContext()
+     *
+     * If `type` is not given in $context but `value` is, add the class or
+     *  type of `value` as `type`.
+     */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

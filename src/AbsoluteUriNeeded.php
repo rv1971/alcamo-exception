@@ -13,6 +13,7 @@ class AbsoluteUriNeeded extends \UnexpectedValueException implements
 {
     use ExceptionTrait;
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Relative URI {uri} given where absolute URI is needed';
 }

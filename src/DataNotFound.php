@@ -12,5 +12,6 @@ namespace alcamo\exception;
  */
 class DataNotFound extends AbstractDataException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Data not found';
 }

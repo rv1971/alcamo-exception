@@ -9,5 +9,6 @@ namespace alcamo\exception;
  */
 class DirectoryNotFound extends AbstractIoException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Directory {path} not found';
 }

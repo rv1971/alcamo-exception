@@ -12,5 +12,6 @@ class InvalidEnumerator extends \UnexpectedValueException implements
 {
     use ExceptionTrait;
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Invalid value {value}';
 }

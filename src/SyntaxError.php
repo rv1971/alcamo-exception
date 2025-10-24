@@ -11,5 +11,6 @@ namespace alcamo\exception;
  */
 class SyntaxError extends AbstractDataException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Syntax error';
 }

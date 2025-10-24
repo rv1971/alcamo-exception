@@ -9,9 +9,14 @@ namespace alcamo\exception;
  */
 class ProcessFailed extends AbstractIoException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Process {command} failed';
 
-    /** If `command` is given as an array, transform it to string. */
+    /**
+     * @copydoc alcamo::exception::ExceptionInterface::setMessageContext()
+     *
+     * If `command` is given as an array, transform it to string.
+     */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

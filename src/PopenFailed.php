@@ -7,5 +7,6 @@ namespace alcamo\exception;
  */
 class PopenFailed extends ProcessFailed
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = 'Failed to open process {command}';
 }

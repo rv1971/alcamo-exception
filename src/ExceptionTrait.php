@@ -46,11 +46,7 @@ trait ExceptionTrait
         );
     }
 
-    /**
-     * @brief Set @ref messageContext
-     *
-     * Then rebuild the denormalized message and return $this.
-     */
+    /** @copydoc alcamo::exception::ExceptionInterface::setMessageContext() */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null
@@ -73,13 +69,7 @@ trait ExceptionTrait
         return $this;
     }
 
-    /**
-     * @brief Add data to @ref messageContext
-     *
-     * Existing data in @ref messageContext may be overwritten.
-     *
-     * Then rebuild the denormalized message and return $this.
-     */
+    /** @copydoc alcamo::exception::ExceptionInterface::addMessageContext() */
     public function addMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

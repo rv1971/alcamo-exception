@@ -11,5 +11,6 @@ class Unsupported extends \LogicException implements ExceptionInterface
 {
     use ExceptionTrait;
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE = '{feature} not supported';
 }

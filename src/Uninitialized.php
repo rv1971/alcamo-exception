@@ -9,6 +9,7 @@ namespace alcamo\exception;
  */
 class Uninitialized extends AbstractObjectStateException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Attempt to access uninitialized {objectType} {object}';
 }

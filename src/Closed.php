@@ -9,6 +9,7 @@ namespace alcamo\exception;
  */
 class Closed extends AbstractObjectStateException
 {
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Attempt to use closed {objectType} {object}';
 }

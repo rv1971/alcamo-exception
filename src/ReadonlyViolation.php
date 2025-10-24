@@ -13,10 +13,15 @@ class ReadonlyViolation extends \LogicException implements ExceptionInterface
         ExceptionTrait::setMessageContext as parentSetMessageContext;
     }
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Attempt to modify readonly object {object}';
 
-    /// Get object and method from backtrace if not given
+    /**
+     * @copydoc alcamo::exception::ExceptionInterface::setMessageContext()
+     *
+     * Add object from backtrace if not given in $context
+     */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

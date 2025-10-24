@@ -9,9 +9,14 @@ namespace alcamo\exception;
  */
 abstract class AbstractObjectStateException extends ProgramFlowException
 {
+    /// Default context to add to the user-supplied context
     public const DEFAULT_MESSAGE_CONTEXT = [ 'objectType' => 'object' ];
 
-    /// Get object from backtrace if not given
+    /**
+     * @copydoc alcamo::exception::ExceptionInterface::setMessageContext()
+     *
+     * Add object from backtrace if not given in $context
+     */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

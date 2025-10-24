@@ -16,10 +16,15 @@ class MethodNotFound extends \BadMethodCallException implements
         ExceptionTrait::setMessageContext as parentSetMessageContext;
     }
 
+    /** @copybrief alcamo::exception::AbsolutePathNeeded::NORMALIZED_MESSAGE */
     public const NORMALIZED_MESSAGE =
         'Method {method} not found in object {object}';
 
-    /// Get object from backtrace if not given
+    /**
+     * @copydoc alcamo::exception::ExceptionInterface::setMessageContext()
+     *
+     * Add object from backtrace if not given in $context.
+     */
     public function setMessageContext(
         array $context,
         ?MessageFactoryInterface $messageFactory = null

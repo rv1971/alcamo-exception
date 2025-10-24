@@ -9,6 +9,7 @@ namespace alcamo\exception;
  */
 interface MessageFactoryInterface
 {
+    /// Create a message string by replacing placeholders
     public function createMessage(
         string $normalizedMessage,
         array $context
