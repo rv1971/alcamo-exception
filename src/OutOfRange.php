@@ -35,7 +35,7 @@ class OutOfRange extends \UnexpectedValueException implements
         $value,
         $lowerBound,
         $upperBound,
-        ?array $context
+        ?array $context = null
     ): void {
         if (
             isset($lowerBound) && $value < $lowerBound
