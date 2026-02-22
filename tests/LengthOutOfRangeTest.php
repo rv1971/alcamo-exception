@@ -4,14 +4,14 @@ namespace alcamo\exception;
 
 use PHPUnit\Framework\TestCase;
 
-class OutOfRangeTest extends TestCase
+class LengthOutOfRangeTest extends TestCase
 {
     /**
      * @dataProvider basicsProvider
      */
     public function testBasics($context, $expectedMessage)
     {
-        $e = new OutOfRange(null, 0, null, $context);
+        $e = new LengthOutOfRange(null, 0, null, $context);
 
         $this->assertSame($expectedMessage, $e->getMessage());
     }
@@ -21,31 +21,28 @@ class OutOfRangeTest extends TestCase
         return [
             [
                 [
-                    'value' => 'NaN'
-                ],
-                'Value "NaN" out of range ["-∞", "∞"]'
-            ],
-            [
-                [
-                    'value' => 1,
+                    'value' => "f",
+                    'length' => 1,
                     'lowerBound' => 2
                 ],
-                'Value 1 out of range [2, "∞"]'
+                'Length 1 of "f" out of range [2, "∞"]'
             ],
             [
                 [
-                    'value' => 0,
-                    'upperBound' => -12
+                    'value' => "foo",
+                    'length' => 3,
+                    'upperBound' => 2
                 ],
-                'Value 0 out of range ["-∞", -12]'
+                'Length 3 of "foo" out of range [0, 2]'
             ],
             [
                 [
-                    'value' => 4,
+                    'value' => "bar-baz",
+                    'length' => 7,
                     'lowerBound' => 1,
-                    'upperBound' => 3
+                    'upperBound' => 6
                 ],
-                'Value 4 out of range [1, 3]'
+                'Length 7 of "bar-baz" out of range [1, 6]'
             ]
         ];
     }
@@ -56,19 +53,20 @@ class OutOfRangeTest extends TestCase
     public function testThrowIfOutside(
         $expectedContext,
         $value,
+        $length,
         $lowerBound,
         $upperBound,
         $context
     ) {
         if (isset($expectedContext)) {
             try {
-                OutOfRange::throwIfOutside(
+                LengthOutOfRange::throwIfOutside(
                     $value,
                     $lowerBound,
                     $upperBound,
                     $context
                 );
-            } catch (OutOfRange $e) {
+            } catch (LengthOutOfRange $e) {
                 $this->assertSame($expectedContext, $e->getMessageContext());
 
                 return;
@@ -76,7 +74,7 @@ class OutOfRangeTest extends TestCase
 
             throw new Exception('No exception thrown.');
         } else {
-            OutOfRange::throwIfOutside(
+            LengthOutOfRange::throwIfOutside(
                 $value,
                 $lowerBound,
                 $upperBound,
@@ -91,45 +89,21 @@ class OutOfRangeTest extends TestCase
     {
         return [
             [
-                null, 1, 0, null, null
-            ],
-            [
-                null, 0, -7, 12, [ 'atUri' => '/somewhere' ]
+                null, "quux", null, null, null, null
             ],
             [
                 [
-                    'value' => 1,
-                    'lowerBound' => 2,
-                    'upperBound' => 42,
+                    'value' => 'foo',
+                    'length' => 3,
+                    'lowerBound' => 4,
+                    'upperBound' => 42
                 ],
-                1,
-                2,
+                'foo',
+                null,
+                4,
                 42,
                 null
-            ],
-            [
-                [
-                    'value' => -7,
-                    'lowerBound' => -43,
-                    'upperBound' => -8,
-                    'atLine' => 17
-                ],
-                -7,
-                -43,
-                -8,
-                [ 'atLine' => 17 ]
             ]
         ];
-    }
-
-    public function testThrowIfNegative(): void
-    {
-        OutOfRange::throwIfNegative(1);
-
-        $this->expectException(OutOfRange::class);
-
-        $this->expectExceptionMessage('Value -1 out of range [0, "∞"]');
-
-        OutOfRange::throwIfNegative(-1);
     }
 }
