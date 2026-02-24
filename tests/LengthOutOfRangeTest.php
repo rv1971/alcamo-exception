@@ -51,12 +51,13 @@ class LengthOutOfRangeTest extends TestCase
      * @dataProvider throwIfOutsideProvider
      */
     public function testThrowIfOutside(
-        $expectedContext,
         $value,
         $length,
         $lowerBound,
         $upperBound,
-        $context
+        $context,
+        $expectedContext,
+        $expectedMessage
     ) {
         if (isset($expectedContext)) {
             try {
@@ -68,6 +69,8 @@ class LengthOutOfRangeTest extends TestCase
                 );
             } catch (LengthOutOfRange $e) {
                 $this->assertSame($expectedContext, $e->getMessageContext());
+
+                $this->assertSame($expectedMessage, $e->getMessage());
 
                 return;
             }
@@ -89,20 +92,35 @@ class LengthOutOfRangeTest extends TestCase
     {
         return [
             [
-                null, "quux", null, null, null, null
+                "quux", null, null, null, null, null, null
             ],
             [
+                'foo',
+                null,
+                4,
+                42,
+                null,
                 [
                     'value' => 'foo',
                     'length' => 3,
                     'lowerBound' => 4,
                     'upperBound' => 42
                 ],
-                'foo',
+                'Length 3 of "foo" out of range [4, 42]'
+            ],
+            [
+                'bar',
                 null,
                 4,
-                42,
-                null
+                null,
+                null,
+                [
+                    'value' => 'bar',
+                    'length' => 3,
+                    'lowerBound' => 4,
+                    'upperBound' => '∞'
+                ],
+                'Length 3 of "bar" out of range [4, "∞"]'
             ]
         ];
     }

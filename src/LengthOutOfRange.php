@@ -49,14 +49,21 @@ class LengthOutOfRange extends \UnexpectedValueException implements
             isset($lowerBound) && $length < $lowerBound
             || isset($upperBound) && $length > $upperBound
         ) {
+            $autoContext = [
+                'value' => $value,
+                'length' => $length,
+            ];
+
+            if (isset($lowerBound)) {
+                $autoContext['lowerBound'] = $lowerBound;
+            }
+
+            if (isset($upperBound)) {
+                $autoContext['upperBound'] = $upperBound;
+            }
+
             throw (new self())->setMessageContext(
-                [
-                    'value' => $value,
-                    'length' => $length,
-                    'lowerBound' => $lowerBound,
-                    'upperBound' => $upperBound
-                ]
-                + (array)$context
+                $autoContext + (array)$context
             );
         }
     }
