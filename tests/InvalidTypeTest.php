@@ -40,6 +40,12 @@ class InvalidTypeTest extends TestCase
                     'expectedOneOf' => [ 'array' ]
                 ],
                 'Invalid type "bool", expected one of ["array"]'
+            ],
+            [
+                [
+                    'expectedOneOf' => [ 'bool' ]
+                ],
+                'Invalid type "NULL", expected one of ["bool"]'
             ]
         ];
     }

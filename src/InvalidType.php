@@ -27,8 +27,8 @@ class InvalidType extends \UnexpectedValueException implements
         array $context,
         ?MessageFactoryInterface $messageFactory = null
     ): ExceptionInterface {
-        if (!isset($context['type']) && isset($context['value'])) {
-            $value = $context['value'];
+        if (!isset($context['type'])) {
+            $value = $context['value'] ?? null;
 
             $context['type'] =
                 is_object($value) ? get_class($value) : gettype($value);
