@@ -163,30 +163,30 @@ class MessageFactory implements MessageFactoryInterface
                     case 'atOffset':
                         $message .= sprintf($fragment, $valueString);
 
-                        if (isset($context['inData'])) {
-                            $dataString = static::valueToString(
-                                $context['inData'],
+                        if (
+                            isset($context['inData'])
+                                && is_string($context['inData'])
+                        ) {
+                            $dataString = $context['inData'];
+
+                            $offendingDataString =
+                                substr($dataString, $valueString);
+
+                            if (strlen($offendingDataString) > $maxLength) {
+                                $offendingDataString =
+                                    substr(
+                                        $offendingDataString,
+                                        0,
+                                        $maxLength - 3
+                                    ) . '...';
+                            }
+
+                            $offendingDataString = static::valueToString(
+                                $offendingDataString,
                                 static::PLACEHOLDER_FLAGS['inData'] ?? null
                             );
 
-                            if ($dataString[0] == '"') {
-                                $offendingDataString = substr(
-                                    $dataString,
-                                    $valueString + 1,
-                                    strlen($dataString) - $valueString - 2
-                                );
-
-                                if (strlen($offendingDataString) > $maxLength) {
-                                    $offendingDataString =
-                                        substr(
-                                            $offendingDataString,
-                                            0,
-                                            $maxLength - 3
-                                        ) . '...';
-                                }
-
-                                $message .= " (\"$offendingDataString\")";
-                            }
+                            $message .= " ($offendingDataString)";
                         }
 
                         break;
