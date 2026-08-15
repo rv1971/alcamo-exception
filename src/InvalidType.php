@@ -36,4 +36,25 @@ class InvalidType extends \UnexpectedValueException implements
 
         return $this->parentSetMessageContext($context, $messageFactory);
     }
+
+    /**
+     * @brief Throw if $value is null
+     *
+     * Convenience method to throw an exception when needed.
+     */
+    public static function throwIfNull(
+        $value,
+        $expectedOneOf = null,
+        ?array $context = null
+    ): void {
+        if (!isset($value)) {
+            throw (new self())->setMessageContext(
+                [
+                    'type' => 'null',
+                    'expectedOneOf' => $expectedOneOf
+                ]
+                + (array)$context
+            );
+        }
+    }
 }
