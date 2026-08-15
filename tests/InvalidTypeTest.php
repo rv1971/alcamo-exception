@@ -63,12 +63,25 @@ class InvalidTypeTest extends TestCase
         InvalidType::throwIfNull(null, [ 'Stringable', 'array' ]);
     }
 
-    public function testThrowIfNull2(): void
+    public function testThrowIfNullOrEmpty(): void
+    {
+        InvalidType::throwIfNullOrEmpty('0');
+
+        $this->expectException(InvalidType::class);
+
+        $this->expectExceptionMessage('Invalid type "<empty-string>"');
+
+        InvalidType::throwIfNullOrEmpty('');
+    }
+
+    public function testThrowIfNullOrEmpty2(): void
     {
         $this->expectException(InvalidType::class);
 
-        $this->expectExceptionMessage('Invalid type "null"');
+        $this->expectExceptionMessage(
+            'Invalid type "null", expected one of "<nonempty-string>"'
+        );
 
-        InvalidType::throwIfNull(null);
+        InvalidType::throwIfNullOrEmpty(null, '<nonempty-string>');
     }
 }

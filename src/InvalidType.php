@@ -57,4 +57,25 @@ class InvalidType extends \UnexpectedValueException implements
             );
         }
     }
+
+    /**
+     * @brief Throw if $value is null or (convertible to) empty string
+     *
+     * Convenience method to throw an exception when needed.
+     */
+    public static function throwIfNullOrEmpty(
+        $value,
+        $expectedOneOf = null,
+        ?array $context = null
+    ): void {
+        if (!isset($value) || (string)$value === '') {
+            throw (new self())->setMessageContext(
+                [
+                    'type' => isset($value) ? '<empty-string>' : 'null',
+                    'expectedOneOf' => $expectedOneOf
+                ]
+                + (array)$context
+            );
+        }
+    }
 }
